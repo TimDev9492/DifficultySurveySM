@@ -52,7 +52,7 @@ def update_difficulty(difficulty, entry):
 get_database_entry()
 
 if st.session_state[finished_flag_key]:
-    st.title("All items have been rated!")
+    st.title("All potion effects have been rated!")
     st.stop()
 
 progress = get_progress()
