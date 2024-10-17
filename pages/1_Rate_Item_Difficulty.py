@@ -29,6 +29,16 @@ def get_database_entry(persist_state=True):
     st.session_state[session_state_key] = resp_data
     return resp_data
 
+def get_progress():
+    # Query to get the count of rows where difficulty is NULL
+    response = st_supabase_client.client.rpc(
+        'completion_progress', {
+            'table_name': 'obtain_item_materials',
+            'condition': 'difficulty IS NOT NULL'
+        }).execute()
+        
+    return response.data
+
 def update_difficulty(difficulty, entry):
     response = st_supabase_client.table(
         'obtain_item_materials'
@@ -44,6 +54,9 @@ get_database_entry()
 if st.session_state[finished_flag_key]:
     st.title("All items have been rated!")
     st.stop()
+
+progress = get_progress()
+st.progress(progress, text="Progress: {:.2f}%".format(progress * 100))
 
 st.title(st.session_state[session_state_key]['name'])
 st.divider()

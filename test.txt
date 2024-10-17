@@ -1,0 +1,19 @@
+DECLARE
+    null_count integer;
+    total_count integer;
+BEGIN
+    -- Count of rows where difficulty is NULL
+    -- SELECT COUNT(*) INTO null_count FROM obtain_item_materials WHERE difficulty IS NULL;
+    EXECUTE format('SELECT COUNT(*) FROM dev.%I WHERE difficulty IS NULL', table_name) INTO null_count;
+    
+    -- Total count of rows
+    -- SELECT COUNT(*) INTO total_count FROM obtain_item_materials;
+    EXECUTE format('SELECT COUNT(*) FROM dev.%I', table_name) INTO total_count;
+
+    -- Calculate and return the percentage
+    IF total_count = 0 THEN
+        RETURN 0; -- Return 0% if there are no rows
+    ELSE
+        RETURN (null_count::float / total_count); -- Calculate percentage
+    END IF;
+END;
