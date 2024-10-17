@@ -1,4 +1,5 @@
 import streamlit as st
+import random
 from st_supabase_connection import SupabaseConnection, execute_query
 
 st_supabase_client = st.connection(name='supabase', type=SupabaseConnection)
@@ -17,14 +18,14 @@ def get_database_entry(persist_state=True):
         '*'
     ).is_(
         'difficulty', 'NULL'
-    ).limit(1).execute()
+    ).execute()
 
     if not response.data or len(response.data) == 0:
         st.session_state[finished_flag_key] = True
         return None
 
     st.session_state[finished_flag_key] = False
-    resp_data = response.data[0]
+    resp_data = random.choice(response.data)
     st.session_state[session_state_key] = resp_data
     return resp_data
 
@@ -51,7 +52,7 @@ difficulty = st.slider(
     1, 10, 5
 )
 
-_, center, _ = st.columns([2, 1, 2])
+left, right = st.columns(2)
 
 def save_difficulty_load_new_item():
     msg = st.toast("Saving changes...")
@@ -62,4 +63,9 @@ def save_difficulty_load_new_item():
         msg.toast(f'There was an error while trying to save the difficulty! Please try again.')
     get_database_entry(persist_state=not success)
 
-center.button("Save & Next", use_container_width=True, on_click=save_difficulty_load_new_item)
+def skip_entry():
+    st.toast(f'Skipping "{st.session_state[session_state_key]["name"]}"...')
+    get_database_entry(persist_state=False)
+
+left.button("Skip", use_container_width=True, on_click=skip_entry)
+right.button("Save & Next", use_container_width=True, on_click=save_difficulty_load_new_item)
