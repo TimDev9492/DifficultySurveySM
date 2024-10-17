@@ -5,7 +5,7 @@ from st_supabase_connection import SupabaseConnection, execute_query
 st_supabase_client = st.connection(name='supabase', type=SupabaseConnection)
 st_supabase_client.client.postgrest.schema(st.secrets.DB_SCHEMA or 'dev')
 
-session_state_key = 'item'
+session_state_key = 'effect'
 finished_flag_key = f'{session_state_key}_finished'
 
 def get_database_entry(persist_state=True):
@@ -13,7 +13,7 @@ def get_database_entry(persist_state=True):
         return st.session_state[session_state_key]
 
     response = st_supabase_client.table(
-        'obtain_item_materials'
+        'potion_effects'
     ).select(
         '*'
     ).is_(
@@ -33,7 +33,7 @@ def get_progress():
     # Query to get the count of rows where difficulty is NULL
     response = st_supabase_client.client.rpc(
         'completion_progress', {
-            'table_name': 'obtain_item_materials',
+            'table_name': 'potion_effects',
             'condition': 'difficulty IS NOT NULL'
         }).execute()
         
@@ -41,7 +41,7 @@ def get_progress():
 
 def update_difficulty(difficulty, entry):
     response = st_supabase_client.table(
-        'obtain_item_materials'
+        'potion_effects'
     ).update({
         'difficulty': difficulty
     }).eq(
@@ -61,7 +61,7 @@ st.progress(progress, text="Progress: {:.2f}%".format(progress * 100))
 st.title(st.session_state[session_state_key]['name'])
 st.divider()
 difficulty = st.slider(
-    "How difficult is it to get this item? (1=Very Easy, 10=Impossible)",
+    "How difficult is it to get this potion effect? (1=Very Easy, 10=Impossible)",
     1, 10, 5
 )
 
