@@ -68,9 +68,9 @@ st.html("""
 1 - Very easy to obtain (basic materials, common drops)
 2 - Easy but requires some basic tools or crafting
 3 - Requires some specific tools or setup
-4 - Requires significant resource gathering or specific locations
-5 - Requires diamonds or extensive exploration
-6 - Requires Nether exploration or advanced game mechanics
+4 - Requires significant resource gathering or specific locations (e.g. nether, biomes, ...)
+5 - Requires diamonds or advanced exploration
+6 - Requires extensive exploration or advanced game mechanics
 7 - Requires significant progression or rare items
 8 - Very difficult within time constraint
 9 - Nearly impossible within time constraint
